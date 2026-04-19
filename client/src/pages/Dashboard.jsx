@@ -9,12 +9,10 @@ export default function Dashboard() {
   const [editingId, setEditingId] = useState(null);
   const [winners, setWinners] = useState([]);
 
-  // ✅ FETCH USER + DATA
   const getUser = async () => {
     const { data: authData } = await supabase.auth.getUser();
     const userId = authData.user.id;
 
-    // safer fetch
     const { data: user } = await supabase
       .from("users")
       .select("*")
@@ -44,7 +42,6 @@ export default function Dashboard() {
     getUser();
   }, []);
 
-  // ✅ ADD / UPDATE SCORE
   const addOrUpdateScore = async () => {
     const { data: authData } = await supabase.auth.getUser();
     const userId = authData.user.id;
@@ -102,20 +99,17 @@ export default function Dashboard() {
     getUser();
   };
 
-  // ✅ DELETE
   const deleteScore = async (id) => {
     await supabase.from("scores").delete().eq("id", id);
     getUser();
   };
 
-  // ✅ EDIT
   const editScore = (s) => {
     setScore(s.score);
     setDate(s.date);
     setEditingId(s.id);
   };
 
-  // ✅ FINAL DRAW LOGIC (PRODUCTION)
   const runDraw = async () => {
     let numbers = new Set();
     while (numbers.size < 5) {
@@ -153,7 +147,6 @@ export default function Dashboard() {
         drawNumbers.includes(s)
       ).length;
 
-      // ✅ REAL CONDITION (as per PRD)
       if (matchCount >= 1) {
         await supabase.from("winners").insert([
           {
@@ -185,7 +178,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* ADD SCORE */}
+      {}
       <div className="section">
         <h2>✨ Add Score</h2>
 
@@ -209,7 +202,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* SCORES */}
+      {}
       <div className="section">
         <h2>📊 Your Scores</h2>
 
@@ -230,7 +223,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* DRAW */}
+      
       <div className="section">
         <h2>🎲 Lucky Draw</h2>
         <button className="btn draw" onClick={runDraw}>
@@ -238,7 +231,6 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* WINNERS */}
       <div className="section">
         <h2>🏆 Your Wins</h2>
 
